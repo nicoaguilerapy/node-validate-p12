@@ -31,7 +31,7 @@
       xhr.onload = function () {
         if (xhr.status >= 200 && xhr.status < 300) {
           var response = JSON.parse(xhr.responseText);
-          resultadoMensaje.innerText = response.message;
+          resultadoMensaje.innerText = response.message+" Validez: "+response.validez.notBefore;
           resultadoMensaje.style.color = 'green'; // Color verde
           resultadoMensaje.style.display = 'block'; // Hacer visible el h2
         } else {

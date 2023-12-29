@@ -24,7 +24,17 @@ app.post('/verificar', upload.single('archivo'), (req, res) => {
     const bags = p12.getBags({ bagType: forge.pki.oids.certBag });
 
     if (bags[forge.pki.oids.certBag]) {
-      res.json({ message: 'La contraseña es correcta.' });
+      const cert = bags[forge.pki.oids.certBag][0];
+      const notBefore = cert.cert.validity.notBefore;
+      const notAfter = cert.cert.validity.notAfter;
+
+      res.json({
+        message: 'La contraseña es correcta.',
+        validez: {
+          notBefore: notBefore.toISOString(),
+          notAfter: notAfter.toISOString()
+        }
+      });
     } else {
       res.status(401).json({ message: 'La contraseña es incorrecta o el archivo P12 es inválido.' });
     }
