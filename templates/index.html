@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verificación de P12</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body class="container mt-5">
+  <h2>Verificación de P12</h2>
+  <form id="verificarForm" enctype="multipart/form-data">
+    <div class="form-group">
+      <label for="archivo">Seleccionar archivo P12:</label>
+      <input type="file" class="form-control-file" id="archivo" name="archivo" accept=".p12" required>
+    </div>
+    <div class="form-group">
+      <label for="contrasena">Contraseña:</label>
+      <input type="password" class="form-control" id="contrasena" name="pass" required>
+    </div>
+    <button type="button" class="btn btn-primary" onclick="verificar()">Verificar</button>
+  </form>
+  <!-- Agregamos un h2 para mostrar el resultado -->
+  <h2 id="resultadoMensaje" style="display: none;"></h2>
+  <script>
+    function verificar() {
+      var formData = new FormData(document.getElementById('verificarForm'));
+      var resultadoMensaje = document.getElementById('resultadoMensaje');
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', '/verificar', true);
+      xhr.onload = function () {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          var response = JSON.parse(xhr.responseText);
+          resultadoMensaje.innerText = response.message;
+          resultadoMensaje.style.color = 'green'; // Color verde
+          resultadoMensaje.style.display = 'block'; // Hacer visible el h2
+        } else {
+          resultadoMensaje.innerText = 'Error en la verificación. Por favor, inténtelo de nuevo.';
+          resultadoMensaje.style.color = 'red'; // Color rojo
+          resultadoMensaje.style.display = 'block'; // Hacer visible el h2
+        }
+      };
+      xhr.onerror = function () {
+        resultadoMensaje.innerText = 'Error en la verificación. Por favor, inténtelo de nuevo.';
+        resultadoMensaje.style.color = 'red'; // Color rojo
+        resultadoMensaje.style.display = 'block'; // Hacer visible el h2
+      };
+      xhr.send(formData);
+    }
+  </script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
